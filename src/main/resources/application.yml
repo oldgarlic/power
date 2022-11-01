@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: dev
+    include: druid
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+      # Springfox 设置 Spring MVC 的路径匹配策略是 ant-path-matcher，而 Spring Boot 2.6.x版本的默认匹配策略是 path-pattern-matcher
