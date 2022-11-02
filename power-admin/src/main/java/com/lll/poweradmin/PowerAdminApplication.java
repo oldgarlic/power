@@ -1,14 +1,13 @@
-package com.lll.power;
+package com.lll.poweradmin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PowerApplication {
+public class PowerAdminApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PowerApplication.class, args);
+        SpringApplication.run(PowerAdminApplication.class, args);
     }
 
 }
-

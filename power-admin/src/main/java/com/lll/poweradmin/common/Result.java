@@ -1,6 +1,6 @@
-package com.lll.power.common;
+package com.lll.poweradmin.common;
 
-import com.lll.power.model.enums.ResultEnum;
+import com.lll.poweradmin.model.enums.ResultEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

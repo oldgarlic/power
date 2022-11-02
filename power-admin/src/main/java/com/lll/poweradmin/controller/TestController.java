@@ -1,7 +1,8 @@
-package com.lll.power.controller;
+package com.lll.poweradmin.controller;
 
-import com.lll.power.common.Result;
-import com.lll.power.model.domain.Person;
+import com.lll.poweradmin.common.Result;
+import com.lll.poweradmin.model.domain.Person;
+import com.lll.poweradmin.common.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,10 +1,10 @@
-package com.lll.power;
+package com.lll.poweradmin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PowerApplicationTests {
+class PowerAdminApplicationTests {
 
     @Test
     void contextLoads() {

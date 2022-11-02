@@ -1,4 +1,4 @@
-package com.lll.power.config;
+package com.lll.poweradmin.config;
 
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 

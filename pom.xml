@@ -13,6 +13,10 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>power</name>
     <description>power-admin</description>
+    <packaging>pom</packaging>
+    <modules>
+        <module>power-admin</module>
+    </modules>
     <properties>
         <java.version>1.8</java.version>
     </properties>

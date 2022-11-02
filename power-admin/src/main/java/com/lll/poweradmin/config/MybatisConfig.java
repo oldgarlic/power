@@ -1,4 +1,4 @@
-package com.lll.power.config;
+package com.lll.poweradmin.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;

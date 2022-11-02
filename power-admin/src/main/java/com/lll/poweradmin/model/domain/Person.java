@@ -1,4 +1,4 @@
-package com.lll.power.model.domain;
+package com.lll.poweradmin.model.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
