@@ -24,7 +24,7 @@ public class Swagger2Config {
                 .groupName("power")
                 .select()
                 //为当前包路径,控制器类包
-                .apis(RequestHandlerSelectors.basePackage("com.lll.power.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.lll.poweradmin.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
