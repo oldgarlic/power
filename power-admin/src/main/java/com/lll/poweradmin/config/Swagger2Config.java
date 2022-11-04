@@ -34,8 +34,7 @@ public class Swagger2Config {
                 //页面标题
                 .title("power管理平台")
                 //创建人
-                .contact(new Contact("oldGarlic", "https://github.com/oldGarlic",
-                        "1215046501@qq.com"))
+                .contact(new Contact("oldGarlic", "https://github.com/oldGarlic", "1215046501@qq.com"))
                 //版本号
                 .version("1.0")
                 //描述

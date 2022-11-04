@@ -51,12 +51,7 @@ public class UserController {
     @PostMapping("page")
     public Result<Page<User>> pageQuery(@RequestBody PageRequest pageRequest){
         Page<User> postPage = new Page<>(pageRequest.getPageNumber(),pageRequest.getPageSize());
-        QueryWrapper<User> postQueryWrapper = new QueryWrapper<>();
-        postQueryWrapper.orderBy(true, "ASC".equals(pageRequest.getOrder()),pageRequest.getSort());
-        if(pageRequest.getFilterMap()!=null){
-            pageRequest.getFilterMap().forEach(postQueryWrapper::like);
-        }
-        Page<User> page = userService.page(postPage, postQueryWrapper);
+        Page<User> page = userService.page(postPage, pageRequest.build(User.class));
         return Result.ok(page);
     }
 
@@ -69,6 +64,7 @@ public class UserController {
     @ApiOperation("新增数据")
     @PostMapping
     public Result<Boolean> add(@RequestBody User user){
+        // 这里需要增加维护关系
         return Result.ok(userService.save(user));
     }
 
@@ -93,6 +89,7 @@ public class UserController {
     @ApiOperation("通过主键删除数据")
     @DeleteMapping("{id}")
     public Result<Boolean> deleteById(@PathVariable("id") long id){
+        // 这里改成逻辑删除
         return Result.ok(userService.removeById(id));
     }
 }

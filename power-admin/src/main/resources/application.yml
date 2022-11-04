@@ -8,7 +8,6 @@ spring:
       # Springfox 设置 Spring MVC 的路径匹配策略是 ant-path-matcher，而 Spring Boot 2.6.x版本的默认匹配策略是 path-pattern-matcher
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: true  # 下划线转驼峰
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # sql日志
   global-config:
     db-config:

@@ -50,12 +50,8 @@ public class DeptController {
     @PostMapping("page")
     public Result<Page<Dept>> pageQuery(@RequestBody PageRequest pageRequest){
         Page<Dept> postPage = new Page<>(pageRequest.getPageNumber(),pageRequest.getPageSize());
-        QueryWrapper<Dept> postQueryWrapper = new QueryWrapper<>();
-        postQueryWrapper.orderBy(true, "ASC".equals(pageRequest.getOrder()),pageRequest.getSort());
-        if(pageRequest.getFilterMap()!=null){
-            pageRequest.getFilterMap().forEach(postQueryWrapper::like);
-        }
-        Page<Dept> page = deptService.page(postPage, postQueryWrapper);
+
+        Page<Dept> page = deptService.page(postPage, pageRequest.build(Dept.class));
         return Result.ok(page);
     }
 

@@ -50,12 +50,7 @@ public class PostController {
     @PostMapping("page")
     public Result<Page<Post>> pageQuery(@RequestBody PageRequest pageRequest){
         Page<Post> postPage = new Page<>(pageRequest.getPageNumber(),pageRequest.getPageSize());
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderBy(true, "ASC".equals(pageRequest.getOrder()),pageRequest.getSort());
-        if(pageRequest.getFilterMap()!=null){
-            pageRequest.getFilterMap().forEach(queryWrapper::like);
-        }
-        Page<Post> page = postService.page(postPage, queryWrapper);
+        Page<Post> page = postService.page(postPage, pageRequest.build(Post.class));
         return Result.ok(page);
     }
 
