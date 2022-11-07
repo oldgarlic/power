@@ -28,4 +28,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private UserMapper userMapper;
 
 
+    /**
+     * 用户登录
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return token字符串
+     */
+    @Override
+    public String login(String username, String password) {
+        // 验证先不做
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername,username);
+        queryWrapper.eq(User::getPassword,password);
+        User user = userMapper.selectOne(queryWrapper);
+        // 进行校验
+        return "asd";
+    }
 }

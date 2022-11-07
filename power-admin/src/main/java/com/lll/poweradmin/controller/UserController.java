@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lll.poweradmin.common.Result;
 import com.lll.poweradmin.model.domain.User;
 import com.lll.poweradmin.common.PageRequest;
+import com.lll.poweradmin.model.request.UserLoginRequest;
 import com.lll.poweradmin.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +30,33 @@ public class UserController {
 
     @Resource
     private IUserService userService;
+
+    @ApiOperation("用户登录")
+    @PostMapping("login")
+    public Result<String> login(@RequestBody UserLoginRequest userLoginRequest){
+        // 拿到请求写回token
+        String token = "asd";
+        // 0.参数校验
+        // 1. 校对用户名和密码
+
+        // 2. 返回token
+        // 记录登录事件
+        return Result.ok(token);
+    }
+
+    @ApiOperation("获取个人用户信息")
+    @GetMapping("info")
+    public Result<User> info(String token){
+        // header里面拿token，cookie
+        User user = User.builder().avatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif").username("admin").password("admin").build();
+        return Result.ok(user);
+    }
+
+    @ApiOperation("用户登出")
+    @PostMapping("logout")
+    public Result<Boolean> logout(){
+        return Result.ok(true);
+    }
 
     /**
      * 通过ID查询单条数据

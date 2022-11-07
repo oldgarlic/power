@@ -12,6 +12,10 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+// import RightToolbar from "@/components/RightToolbar"
+// // 全局组件挂载
+// Vue.component('RightToolbar', RightToolbar)
+
 import '@/icons' // icon
 import '@/permission' // permission control
 
@@ -23,10 +27,12 @@ import '@/permission' // permission control
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+
+// 关闭mock代理
+// if (process.env.NODE_ENV === 'production') {
+//   const { mockXHR } = require('../mock')
+//   mockXHR()
+// }
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
