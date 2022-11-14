@@ -66,19 +66,19 @@ export const constantRoutes = [
         path: 'user',
         name: 'User',
         component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'table' }
+        meta: { title: '用户管理', icon: 'el-icon-user' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '部门管理', icon: 'tree' }
+        path: 'dept',
+        name: 'Dept',
+        component: () => import('@/views/dept/index'),
+        meta: { title: '部门管理', icon: 'el-icon-s-custom' }
       },
       {
-        path: 'tree2',
-        name: 'Tree2',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '岗位管理', icon: 'tree' }
+        path: 'post',
+        name: 'Post',
+        component: () => import('@/views/post/index'),
+        meta: { title: '岗位管理', icon: 'el-icon-s-check' }
       }
     ]
   },

@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author oldgarlic
  * @since 2022-11-03
  */
+
 public interface IUserService extends IService<User> {
     /**
      *  用户登录

@@ -31,8 +31,8 @@ public class Post implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "岗位id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(type = IdType.AUTO)
+    private Long postId;
 
     @ApiModelProperty(value = "岗位编号")
     private String postCode;
@@ -50,15 +50,14 @@ public class Post implements Serializable {
     private String createBy;
 
     @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "更新人")
     private String updateBy;
 
     @ApiModelProperty(value = "更新时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
-
+    @ApiModelProperty(value = "逻辑删除")
+    private boolean del_flag;
 }

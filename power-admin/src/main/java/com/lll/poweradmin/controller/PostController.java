@@ -12,6 +12,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>
@@ -40,6 +44,14 @@ public class PostController {
         return Result.ok(postService.getById(id));
     }
 
+
+    @ApiOperation("获取岗位列表")
+    @GetMapping("list")
+    public Result<List<Post>> getPostList(){
+        return Result.ok(postService.list());
+    }
+
+
     /**
      * 分页查询
      *
@@ -63,6 +75,9 @@ public class PostController {
     @ApiOperation("新增数据")
     @PostMapping
     public Result<Boolean> add(@RequestBody Post post){
+        if(post.getPostId()!=null){
+            return Result.ok(postService.updateById(post));
+        }
         return Result.ok(postService.save(post));
     }
 
@@ -81,12 +96,14 @@ public class PostController {
     /**
      * 通过主键删除数据
      *
-     * @param id 主键
+     * @param postIds 岗位ids
      * @return 是否成功
      */
     @ApiOperation("通过主键删除数据")
-    @DeleteMapping("{id}")
-    public Result<Boolean> deleteById(@PathVariable("id") long id){
-        return Result.ok(postService.removeById(id));
+    @DeleteMapping("{postIds}")
+    public Result<Boolean> deleteByIds(@PathVariable("postIds") Long[] postIds){
+        ArrayList<Long> postIdList = new ArrayList<>();
+        Collections.addAll(postIdList,postIds);
+        return Result.ok(postService.removeBatchByIds(postIdList));
     }
 }

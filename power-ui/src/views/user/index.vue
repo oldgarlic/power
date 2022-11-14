@@ -96,6 +96,7 @@
               plain
               icon="el-icon-edit"
               size="mini"
+              :disabled="single"
               @click="handleUpdate"
             >修改</el-button>
           </el-col>
@@ -186,12 +187,118 @@
         />
       </el-col>
     </el-row>
+    <!-- 添加或修改用户配置对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="用户昵称" prop="nickName">
+              <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="归属部门" prop="deptId">
+              <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="手机号码" prop="phonenumber">
+              <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
+              <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
+              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="用户性别">
+              <el-select v-model="form.sex" placeholder="请选择性别">
+                <el-option
+                  v-for="dict in dict.type.sys_user_sex"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="dict in dict.type.sys_normal_disable"
+                  :key="dict.value"
+                  :label="dict.value"
+                >{{dict.label}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="岗位">
+              <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
+                <el-option
+                  v-for="item in postOptions"
+                  :key="item.postId"
+                  :label="item.postName"
+                  :value="item.postId"
+                  :disabled="item.status == 1"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="角色">
+              <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
+                <el-option
+                  v-for="item in roleOptions"
+                  :key="item.roleId"
+                  :label="item.roleName"
+                  :value="item.roleId"
+                  :disabled="item.status == 1"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备注">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getList } from '@/api/table'
-
+import Treeselect from "@riophae/vue-treeselect";
+import '@riophae/vue-treeselect/dist/vue-treeselect.css';
 export default {
   filters: {
     statusFilter(status) {
@@ -203,6 +310,7 @@ export default {
       return statusMap[status]
     }
   },
+  components: { Treeselect },
   data() {
     return {
       // 这里是数据
@@ -266,14 +374,48 @@ export default {
       dict: {
         type: {
           sys_normal_disable: [{
-            value: 1,
-            label: '可用'
+            value: 0,
+            label: '正常'
           },
           {
-            value: 2,
-            label: '不可用'
+            value: 1,
+            label: '停用'
           }]
         }
+      },
+      title: '',
+      form: {},
+      // 岗位选项
+      postOptions: [],
+      // 角色选项
+      roleOptions: [],
+      // 表单校验
+      rules: {
+        userName: [
+          { required: true, message: "用户名称不能为空", trigger: "blur" },
+          { min: 2, max: 20, message: '用户名称长度必须介于 2 和 20 之间', trigger: 'blur' }
+        ],
+        nickName: [
+          { required: true, message: "用户昵称不能为空", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "用户密码不能为空", trigger: "blur" },
+          { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
+        ],
+        email: [
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"]
+          }
+        ],
+        phonenumber: [
+          {
+            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+            message: "请输入正确的手机号码",
+            trigger: "blur"
+          }
+        ]
       },
       // 列信息
       columns: [
@@ -299,14 +441,18 @@ export default {
       deptName: '',
       // 部门树选项
       deptOptions: [{
+        id: 1,
         label: 'label',
         children: [{
+          id: 2,
           label: 'children1'
         },
         {
+          id: 3,
           label: 'children2'
         },
         {
+          id: 4,
           label: 'children3'
         }]
       }],
@@ -314,7 +460,10 @@ export default {
         children: 'children',
         label: 'label'
       },
-      listLoading: false
+      listLoading: false,
+      open: false,
+      ids: [],
+      single: false
     }
   },
   created() {
@@ -346,14 +495,23 @@ export default {
         this.listLoading = false
       })
     },
-    handleSelectionChange() {
-      console.log('say good job')
+    handleSelectionChange(selection) {
+      console.log('选择切换')
+      this.ids = selection.map(item => item.userId)
+      this.single = selection.length !== 1
+      if (!this.single) {
+        this.form = selection[0]
+        console.log('赋值')
+        console.log(this.form)
+      }
     },
     handleStatusChange() {
       console.log('状态切换')
     },
-    handleDelete() {
-
+    handleDelete(row) {
+      console.log('点击 删除')
+      const userIds = row.userId || this.ids
+      console.log(userIds)
     },
     handleCommand() {
 
@@ -374,15 +532,29 @@ export default {
     },
     handleAdd() {
       console.log('添加用户')
+      this.open = true
     },
-    handleUpdate() {
+    handleUpdate(row) {
+      // TODO: 逻辑还是有点小问题
       console.log('修改用户')
+      const userId = row.userId || this.ids
+      this.open = true
+      if (this.single) {
+        console.log(row)
+        this.form = row
+      }
     },
     handleImport() {
       console.log('导入用户')
     },
     handleExport() {
       console.log('导出用户')
+    },
+    submitForm() {
+      console.log('提交表单')
+    },
+    cancel() {
+
     }
   }
 }

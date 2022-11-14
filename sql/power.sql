@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS user;
 CREATE TABLE user(
-                     `id` BIGINT NOT NULL AUTO_INCREMENT  COMMENT '用户ID' ,
+                     `user_id` BIGINT NOT NULL AUTO_INCREMENT  COMMENT '用户ID' ,
                      `username` VARCHAR(16)    COMMENT '用户名称' ,
                      `nickname` VARCHAR(16)    COMMENT '用户昵称' ,
                      `password` VARCHAR(16)  NOT NULL  COMMENT '密码' ,
@@ -23,7 +23,7 @@ CREATE TABLE user(
 
 DROP TABLE IF EXISTS dept;
 CREATE TABLE dept(
-                     `id` BIGINT NOT NULL AUTO_INCREMENT  COMMENT '部门ID' ,
+                     `dept_id` BIGINT NOT NULL AUTO_INCREMENT  COMMENT '部门ID' ,
                      `parent_id` BIGINT    COMMENT '父部门ID' ,
                      `dept_name` VARCHAR(16)  NOT NULL  COMMENT '部门名称' ,
                      `ancestors` VARCHAR(16)    COMMENT '祖级部门' ,
@@ -36,11 +36,12 @@ CREATE TABLE dept(
                      `create_time` DATETIME  DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间' ,
                      `update_by` VARCHAR(32)    COMMENT '更新人' ,
                      `update_time` DATETIME   DEFAULT CURRENT_TIMESTAMP  on update CURRENT_TIMESTAMP COMMENT '更新时间' ,
+                     `del_flag` TINYINT DEFAULT 0   COMMENT '逻辑删除;0存在,1删除' ,
                      PRIMARY KEY (id)
 )  COMMENT = '部门信息表';
 DROP TABLE IF EXISTS post;
 CREATE TABLE post(
-                     `id` BIGINT NOT NULL AUTO_INCREMENT  COMMENT '岗位id' ,
+                     `post_id` BIGINT NOT NULL AUTO_INCREMENT  COMMENT '岗位id' ,
                      `post_code` VARCHAR(64) NOT NULL   COMMENT '岗位编号' ,
                      `post_name` VARCHAR(64) NOT NULL   COMMENT '岗位名称' ,
                      `post_sort` INT    COMMENT '显示顺序' ,
@@ -49,6 +50,7 @@ CREATE TABLE post(
                      `create_time` DATETIME  DEFAULT CURRENT_TIMESTAMP  COMMENT '创建时间' ,
                      `update_by` VARCHAR(32)    COMMENT '更新人' ,
                      `update_time` DATETIME  DEFAULT CURRENT_TIMESTAMP  on update CURRENT_TIMESTAMP  COMMENT '更新时间' ,
+                     `del_flag` TINYINT DEFAULT 0   COMMENT '逻辑删除;0存在,1删除' ,
                      PRIMARY KEY (id)
 )  COMMENT = '岗位信息表';
 
