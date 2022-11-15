@@ -1,12 +1,11 @@
 package com.lll.poweradmin.common;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lll.poweradmin.model.domain.Dept;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Data
 public class PageRequest {
@@ -21,7 +20,7 @@ public class PageRequest {
     /**
      * 排序字段
      */
-    private String sort = "id";
+    private String sort = "post_sort";
     /**
      * 升序/降序
      */
@@ -29,15 +28,36 @@ public class PageRequest {
     /**
      * 过滤条件
      */
-    private HashMap<String,String> filterMap;
+    private HashMap<String,String> filter;
 
     public <T> QueryWrapper<T> build(Class<T> t){
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderBy(true, asc,this.getSort());
-        if(this.getFilterMap()!=null){
-            this.getFilterMap().forEach(queryWrapper::like);
+        if(this.getFilter()!=null){
+            for (Map.Entry<String, String> entry : this.getFilter().entrySet()) {
+                String underline = underline(entry.getKey());
+                queryWrapper.like(underline,entry.getValue());
+            }
         }
         return queryWrapper;
     }
+
+    private String underline(String name) {
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < name.length(); ++i) {
+            char ch = name.charAt(i);
+            if (ch >= 'A' && ch <= 'Z') {
+                char ch_ucase = (char) (ch + 32);
+                if (i > 0) {
+                    buf.append('_');
+                }
+                buf.append(ch_ucase);
+            } else {
+                buf.append(ch);
+            }
+        }
+        return buf.toString();
+    }
+
 
 }

@@ -2,15 +2,15 @@
     <div class="app-container">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" label-width="68px">
             <el-form-item label="岗位编码" prop="postCode">
-                <el-input v-model="queryParams.postCode" placeholder="请输入岗位编码" clearable
+                <el-input v-model="queryParams.filter.postCode" placeholder="请输入岗位编码" clearable
                     @keyup.enter.native="handleQuery" />
             </el-form-item>
             <el-form-item label="岗位名称" prop="postName">
-                <el-input v-model="queryParams.postName" placeholder="请输入岗位名称" clearable
+                <el-input v-model="queryParams.filter.postName" placeholder="请输入岗位名称" clearable
                     @keyup.enter.native="handleQuery" />
             </el-form-item>
             <el-form-item label="状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="岗位状态" clearable>
+                <el-select v-model="queryParams.filter.status" placeholder="岗位状态" clearable>
                     <el-option v-for="dict in dictType.sys_normal_disable" :key="dict.value" :label="dict.label"
                         :value="dict.value" />
                 </el-select>
@@ -39,7 +39,7 @@
             </el-col>
         </el-row>
 
-        <el-table :data="postList" @selection-change="handleSelectionChange">
+        <el-table ref="tableData" :data="postList" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="岗位编号" align="center" prop="postId" />
             <el-table-column label="岗位编码" align="center" prop="postCode" />
@@ -189,9 +189,11 @@ export default {
             queryParams: {
                 pageNum: 1,
                 pageSize: 10,
-                postCode: undefined,
-                postName: undefined,
-                status: undefined
+                filter: {
+                    postCode: undefined,
+                    postName: undefined,
+                    status: undefined
+                }
             },
             // 表单参数
             form: {},
@@ -215,8 +217,11 @@ export default {
     methods: {
         /** 查询岗位列表 */
         getList() {
-            getList().then((response) => {
-                this.postList = response.data
+            getList({}).then((response) => {
+                this.postList = response.data.records
+                this.total  = response.data.total
+                this.queryParams.pageNum = response.data.current
+                this.queryParams.pageSize = response.data.size
             })
         },
         // 取消按钮
@@ -225,21 +230,30 @@ export default {
         // 表单重置
         reset() { 
             this.form = {
-            postId: undefined,
-            postCode: undefined,
-            postName: undefined,
-            postSort: 0,
-            status: "0",
-            remark: undefined
+                postId: undefined,
+                postCode: undefined,
+                postName: undefined,
+                postSort: 0,
+                status: "0",
+                remark: undefined
             };
         },
         /** 搜索按钮操作 */
         handleQuery() {
             console.log('执行搜索')
+            getList(this.queryParams).then((response) => {
+                this.postList = response.data.records
+                this.total  = response.data.total
+                this.queryParams.pageNum = response.data.current
+                this.queryParams.pageSize = response.data.size
+            })
         },
         /** 重置按钮操作 */
         resetQuery() {
             console.log('取消搜索')
+            this.queryParams.filter.postCode = undefined
+            this.queryParams.filter.postName = undefined
+            this.queryParams.filter.status = undefined
         },
         // 多选框选中数据
         handleSelectionChange(selection) {
@@ -256,8 +270,16 @@ export default {
         },
         /** 修改按钮操作 */
         handleUpdate(row) {
-            console.log('执行修改,id: ' + row.postId)
-            this.form = row
+            var postId = null
+            if(row.postId){
+                this.form = row
+                postId = row.postId
+            }else{
+                postId = this.ids[0]
+                // console.log(this.$refs.tableData.selection)
+                this.form = this.$refs.tableData.selection[0]
+            }
+            // console.log('执行修改,id: ' + postId)
             this.open = true
         },
         /** 提交按钮 */
@@ -266,6 +288,7 @@ export default {
             console.log(this.form)
             addOrUpdatePost(this.form)
             this.open = false
+            this.getList()
         },
         /** 删除按钮操作 */
         handleDelete(row) {
@@ -283,6 +306,7 @@ export default {
             }).catch(() => {
                 this.$message("删除失败");
             });
+            this.getList()
         },
         /** 导出按钮操作 */
         handleExport() { 

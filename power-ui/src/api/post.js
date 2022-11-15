@@ -11,10 +11,11 @@ export function addOrUpdatePost(data){
 }
 
 
-export function getList() {
+export function getList(data) {
     return request({
-        url: '/power/post/list',
-        method: 'get'
+        url: '/power/post/page',
+        method: 'post',
+        data
     })
 }
 
