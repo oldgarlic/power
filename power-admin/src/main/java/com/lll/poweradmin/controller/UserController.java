@@ -1,7 +1,5 @@
 package com.lll.poweradmin.controller;
 
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lll.poweradmin.common.Result;
 import com.lll.poweradmin.model.domain.User;
@@ -78,8 +76,8 @@ public class UserController {
     @ApiOperation("分页查询")
     @PostMapping("page")
     public Result<Page<User>> pageQuery(@RequestBody PageRequest pageRequest){
-        Page<User> postPage = new Page<>(pageRequest.getPageNumber(),pageRequest.getPageSize());
-        Page<User> page = userService.page(postPage, pageRequest.build(User.class));
+        Page<User> userPage = pageRequest.buildPage(User.class);
+        Page<User> page = userService.page(userPage, pageRequest.build(User.class));
         return Result.ok(page);
     }
 
@@ -91,9 +89,14 @@ public class UserController {
      */
     @ApiOperation("新增数据")
     @PostMapping
-    public Result<Boolean> add(@RequestBody User user){
+    public Result<?> add(@RequestBody User user){
+        if(user.getUserId()!=null){
+            userService.updateById(user);
+        }else{
+            userService.save(user);
+        }
         // 这里需要增加维护关系
-        return Result.ok(userService.save(user));
+        return Result.ok();
     }
 
     /**

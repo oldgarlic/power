@@ -2,10 +2,10 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true">
       <el-form-item label="部门名称" prop="deptName">
-        <el-input v-model="queryParams.deptName" placeholder="请输入部门名称" clearable @keyup.enter.native="handleQuery" />
+        <el-input v-model="queryParams.filter.deptName" placeholder="请输入部门名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="部门状态" clearable>
+        <el-select v-model="queryParams.filter.status" placeholder="部门状态" clearable>
           <el-option v-for="dict in dictType.sys_normal_disable" :key="dict.value" :label="dict.label"
             :value="dict.value" />
         </el-select>
@@ -28,7 +28,7 @@
     <el-table v-if="refreshTable" :data="deptList" row-key="deptId" :default-expand-all="isExpandAll"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
       <el-table-column prop="deptName" label="部门名称" width="260" />
-      <el-table-column prop="orderNum" label="排序" width="200" />
+      <el-table-column prop="deptSort" label="排序" width="200" />
       <el-table-column prop="status" label="状态" width="100">
         <template slot-scope="scope">
           <el-tag type="success">{{ dict[scope.row.status] }}</el-tag>
@@ -68,7 +68,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="显示排序" prop="orderNum">
-              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
+              <el-input-number v-model="form.deptSort" controls-position="right" :min="0" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -112,7 +112,7 @@
 <script>
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-
+import { addOrUpdateDept, getList, deleteDept } from '@/api/dept'
 export default {
   name: 'Dept',
   components: { Treeselect },
@@ -166,8 +166,7 @@ export default {
       }],
       // 部门树选项
       deptOptions: [{
-        id: 1,
-        label: 'label',
+        id: 1, 
         children: [{
           id: 2,
           label: 'children1'
@@ -191,8 +190,11 @@ export default {
       refreshTable: true,
       // 查询参数
       queryParams: {
-        deptName: undefined,
-        status: undefined
+        filter:{
+          deptName: undefined,
+          status: undefined
+        },
+        sort: 'dept_sort'
       },
       dictType: {
         sys_normal_disable: [
@@ -242,7 +244,12 @@ export default {
   methods: {
     /** 查询部门列表 */
     getList() {
-
+      getList(this.queryParams).then(response => {
+        // this.deptList = response.data;
+        // 这里要构建出树形数据
+        this.deptList = this.handleTree(response.data, "deptId");
+        this.deptOptions = this.handleTree(response.data, "deptId");
+      })
     },
     /** 转换部门数据结构 */
     normalizer(node) {
@@ -250,18 +257,27 @@ export default {
     },
     // 取消按钮
     cancel() {
+      this.open = false;
     },
     // 表单重置
     reset() {
     },
     /** 搜索按钮操作 */
     handleQuery() {
+      this.getList()
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this. queryParams = {
+        filter:{
+          deptName: undefined,
+          status: undefined
+        },
+        sort: 'dept_sort'
+      }
     },
     /** 新增按钮操作 */
-    handleAdd(row) {
+    handleAdd() {
       console.log('执行添加')
       this.open = true
     },
@@ -276,13 +292,78 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       console.log('执行修改')
+      this.open = true;
+      this.form = row
     },
     /** 提交按钮 */
     submitForm() {
+      addOrUpdateDept(this.form).then(()=>{
+        this.getList()
+      })
+      this.open = false;
     },
     /** 删除按钮操作 */
     handleDelete(row) {
       console.log('执行删除')
+      deleteDept(row.deptId).then(()=>{
+        this.getList()
+      })
+    },
+    /**
+     * 构造树型结构数据
+     * @param {*} data 数据源
+     * @param {*} id id字段 默认 'id'
+     * @param {*} parentId 父节点字段 默认 'parentId'
+     * @param {*} children 孩子节点字段 默认 'children'
+     */
+    handleTree(data, id, parentId, children) {
+      let config = {
+        id: id || 'id',
+        parentId: parentId || 'parentId',
+        childrenList: children || 'children'
+      };
+
+      var childrenListMap = {};
+      var nodeIds = {};
+      var tree = [];
+
+      for (let d of data) {
+        let parentId = d[config.parentId];
+        if (childrenListMap[parentId] == null) {
+          childrenListMap[parentId] = [];
+        }
+        nodeIds[d[config.id]] = d;
+        childrenListMap[parentId].push(d);
+      }
+
+      for (let d of data) {
+        let parentId = d[config.parentId];
+        if (nodeIds[parentId] == null) {
+          // 自己补充
+          d.id = d.deptId
+          d.label = d.deptName
+          tree.push(d);
+        }
+      }
+
+      for (let t of tree) {
+        adaptToChildrenList(t);
+      }
+
+      function adaptToChildrenList(o) {
+        // 自己补充
+        o.id = o.deptId
+        o.label = o.deptName
+        if (childrenListMap[o[config.id]] !== null) {
+          o[config.childrenList] = childrenListMap[o[config.id]];
+        }
+        if (o[config.childrenList]) {
+          for (let c of o[config.childrenList]) {
+            adaptToChildrenList(c);
+          }
+        }
+      }
+      return tree;
     }
   }
 }

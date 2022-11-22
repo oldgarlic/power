@@ -2,6 +2,7 @@ package com.lll.poweradmin.common;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class PageRequest {
     /**
      * 排序字段
      */
-    private String sort = "post_sort";
+    private String sort = "id";
     /**
      * 升序/降序
      */
@@ -47,11 +48,11 @@ public class PageRequest {
         for (int i = 0; i < name.length(); ++i) {
             char ch = name.charAt(i);
             if (ch >= 'A' && ch <= 'Z') {
-                char ch_ucase = (char) (ch + 32);
+                char ch_case = (char) (ch + 32);
                 if (i > 0) {
                     buf.append('_');
                 }
-                buf.append(ch_ucase);
+                buf.append(ch_case);
             } else {
                 buf.append(ch);
             }
@@ -59,5 +60,8 @@ public class PageRequest {
         return buf.toString();
     }
 
+    public <T> Page<T> buildPage(Class<T> t){
+        return new Page<T>(getPageNumber(),getPageSize());
+    }
 
 }

@@ -22,3 +22,19 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function list() {
+  return request({
+    url: '/power/user/logout',
+    method: 'post'
+  })
+}
+
+export function addOrUpdateUser(data) {
+  return request({
+    url: '/power/user',
+    method: 'post',
+    data
+  })
+}
+

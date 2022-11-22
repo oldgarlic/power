@@ -65,14 +65,16 @@
 
         <!-- 分页数据 -->
         <el-pagination
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            :page-size.sync="queryParams.pageSize"
-            :page-sizes="[10, 15, 20, 30]"
-            :current-page="queryParams.pageNum"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
+            :current-page.sync="queryParams.pageNumber"
+            :page-size.sync="queryParams.pageSize"
+            :page-sizes="[5, 10, 20, 50]"
+            :total="total"
+            layout="total, sizes, prev, pager, next, jumper"
         />
+
+    
         <!-- 添加或修改岗位对话框 -->
         <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
             <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -187,7 +189,7 @@ export default {
             open: false,
             // 查询参数
             queryParams: {
-                pageNum: 1,
+                pageNumber: 1,
                 pageSize: 10,
                 filter: {
                     postCode: undefined,
@@ -220,7 +222,7 @@ export default {
             getList({}).then((response) => {
                 this.postList = response.data.records
                 this.total  = response.data.total
-                this.queryParams.pageNum = response.data.current
+                this.queryParams.pageNumberber = response.data.current
                 this.queryParams.pageSize = response.data.size
             })
         },
@@ -241,10 +243,11 @@ export default {
         /** 搜索按钮操作 */
         handleQuery() {
             console.log('执行搜索')
+            console.log(this.queryParams)
             getList(this.queryParams).then((response) => {
                 this.postList = response.data.records
                 this.total  = response.data.total
-                this.queryParams.pageNum = response.data.current
+                this.queryParams.pageNumber = response.data.current
                 this.queryParams.pageSize = response.data.size
             })
         },
@@ -313,10 +316,12 @@ export default {
             console.log('文件导出')
         },
         handleSizeChange() {
-
+            console.log("修改页面大小")
+            this.handleQuery()
         },
-        handleCurrentChange() {
-            
+        handleCurrentChange(val) {
+            console.log("当前页面修改:"+val);
+            this.handleQuery()
         }
     },
 };

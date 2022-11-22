@@ -31,8 +31,8 @@ public class Dept implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "部门ID")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(type = IdType.AUTO)
+    private Long deptId;
 
     @ApiModelProperty(value = "父部门ID")
     private Long parentId;
@@ -70,5 +70,6 @@ public class Dept implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
-
+    @ApiModelProperty(value = "逻辑删除:0=正常;1=删除")
+    private boolean delFlag;
 }

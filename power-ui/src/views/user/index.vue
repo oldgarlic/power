@@ -30,9 +30,9 @@
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form ref="queryForm" :model="queryParams" size="small" :inline="true" label-width="68px">
-          <el-form-item label="用户名称" prop="userName">
+          <el-form-item label="用户名称" prop="username">
             <el-input
-              v-model="queryParams.userName"
+              v-model="queryParams.username"
               placeholder="请输入用户名称"
               clearable
               style="width: 240px"
@@ -140,8 +140,8 @@
           <!-- 选择框 -->
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column key="userId" label="用户编号" align="center" prop="userId" />
-          <el-table-column key="userName" label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" />
-          <el-table-column key="nickName" label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" />
+          <el-table-column key="username" label="用户名称" align="center" prop="username" :show-overflow-tooltip="true" />
+          <el-table-column key="nickname" label="用户昵称" align="center" prop="nickname" :show-overflow-tooltip="true" />
           <el-table-column key="deptName" label="部门" align="center" prop="deptName" :show-overflow-tooltip="true" />
           <el-table-column key="phonenumber" label="手机号码" align="center" prop="phonenumber" width="120" />
           <el-table-column key="status" label="状态" align="center">
@@ -192,8 +192,8 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="用户昵称" prop="nickName">
-              <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
+            <el-form-item label="用户昵称" prop="nickname">
+              <el-input v-model="form.nickname" placeholder="请输入用户昵称" maxlength="30" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -216,8 +216,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
-              <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
+            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="username">
+              <el-input v-model="form.username" placeholder="请输入用户名称" maxlength="30" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -296,7 +296,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { addOrUpdateUser,list } from '@/api/user'
 import Treeselect from "@riophae/vue-treeselect";
 import '@riophae/vue-treeselect/dist/vue-treeselect.css';
 export default {
@@ -317,8 +317,8 @@ export default {
       userList: [
         {
           userId: 1,
-          userName: '张飞',
-          nickName: '战神',
+          username: '张飞',
+          nickname: '战神',
           deptName: '马来西亚',
           phonenumber: '110',
           status: 1,
@@ -326,8 +326,8 @@ export default {
         },
         {
           userId: 2,
-          userName: '张飞',
-          nickName: '战神',
+          username: '张飞',
+          nickname: '战神',
           deptName: '马来西亚',
           phonenumber: '110',
           status: 1,
@@ -335,8 +335,8 @@ export default {
         },
         {
           userId: 3,
-          userName: '张飞',
-          nickName: '战神',
+          username: '张飞',
+          nickname: '战神',
           deptName: '马来西亚',
           phonenumber: '110',
           status: 1,
@@ -344,8 +344,8 @@ export default {
         },
         {
           userId: 4,
-          userName: '张飞',
-          nickName: '战神',
+          username: '张飞',
+          nickname: '战神',
           deptName: '马来西亚',
           phonenumber: '110',
           status: 1,
@@ -353,8 +353,8 @@ export default {
         },
         {
           userId: 5,
-          userName: '张飞',
-          nickName: '战神',
+          username: '张飞',
+          nickname: '战神',
           deptName: '马来西亚',
           phonenumber: '110',
           status: 1,
@@ -362,8 +362,8 @@ export default {
         },
         {
           userId: 6,
-          userName: '张飞',
-          nickName: '战神',
+          username: '张飞',
+          nickname: '战神',
           deptName: '马来西亚',
           phonenumber: '110',
           status: 1,
@@ -391,11 +391,11 @@ export default {
       roleOptions: [],
       // 表单校验
       rules: {
-        userName: [
+        username: [
           { required: true, message: "用户名称不能为空", trigger: "blur" },
           { min: 2, max: 20, message: '用户名称长度必须介于 2 和 20 之间', trigger: 'blur' }
         ],
-        nickName: [
+        nickname: [
           { required: true, message: "用户昵称不能为空", trigger: "blur" }
         ],
         password: [
@@ -432,7 +432,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        userName: undefined,
+        username: undefined,
         phonenumber: undefined,
         status: undefined,
         deptId: undefined
@@ -489,10 +489,8 @@ export default {
       // TODO
     },
     fetchData() {
-      this.listLoading = true
       getList().then((response) => {
         this.list = response.data.items
-        this.listLoading = false
       })
     },
     handleSelectionChange(selection) {
@@ -552,6 +550,9 @@ export default {
     },
     submitForm() {
       console.log('提交表单')
+      addOrUpdateUser(this.form).then(() =>{
+        // this.fetchData()
+      })
     },
     cancel() {
 

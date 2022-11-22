@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -49,11 +50,21 @@ public class DeptController {
     @ApiOperation("分页查询")
     @PostMapping("page")
     public Result<Page<Dept>> pageQuery(@RequestBody PageRequest pageRequest){
-        Page<Dept> postPage = new Page<>(pageRequest.getPageNumber(),pageRequest.getPageSize());
-
-        Page<Dept> page = deptService.page(postPage, pageRequest.build(Dept.class));
+        Page<Dept> deptPage = pageRequest.buildPage(Dept.class);
+        Page<Dept> page = deptService.page(deptPage, pageRequest.build(Dept.class));
         return Result.ok(page);
     }
+
+    /**
+     * 查询部门列表
+     * @return 部门列表对象
+     */
+    @ApiOperation("部门列表")
+    @PostMapping("list")
+    public Result<List<Dept>> deptList(@RequestBody PageRequest pageRequest){
+        return Result.ok(deptService.list(pageRequest.build(Dept.class)));
+    }
+
 
     /**
      * 新增数据
@@ -64,7 +75,11 @@ public class DeptController {
     @ApiOperation("新增数据")
     @PostMapping
     public Result<Boolean> add(@RequestBody Dept dept){
-        return Result.ok(deptService.save(dept));
+        if(dept.getDeptId()!=null){
+            return Result.ok(deptService.updateById(dept));
+        }else {
+            return Result.ok(deptService.save(dept));
+        }
     }
 
     /**

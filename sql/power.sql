@@ -18,7 +18,7 @@ CREATE TABLE user(
                      `update_by` VARCHAR(32)    COMMENT '更新人' ,
                      `update_time` DATETIME  DEFAULT CURRENT_TIMESTAMP  on update CURRENT_TIMESTAMP  COMMENT '更新时间' ,
                      `remark` VARCHAR(255)    COMMENT '注解' ,
-                     PRIMARY KEY (id)
+                     PRIMARY KEY (user_id)
 )  COMMENT = '用户信息表';
 
 DROP TABLE IF EXISTS dept;
@@ -37,7 +37,7 @@ CREATE TABLE dept(
                      `update_by` VARCHAR(32)    COMMENT '更新人' ,
                      `update_time` DATETIME   DEFAULT CURRENT_TIMESTAMP  on update CURRENT_TIMESTAMP COMMENT '更新时间' ,
                      `del_flag` TINYINT DEFAULT 0   COMMENT '逻辑删除;0存在,1删除' ,
-                     PRIMARY KEY (id)
+                     PRIMARY KEY (dept_id)
 )  COMMENT = '部门信息表';
 DROP TABLE IF EXISTS post;
 CREATE TABLE post(
@@ -51,7 +51,7 @@ CREATE TABLE post(
                      `update_by` VARCHAR(32)    COMMENT '更新人' ,
                      `update_time` DATETIME  DEFAULT CURRENT_TIMESTAMP  on update CURRENT_TIMESTAMP  COMMENT '更新时间' ,
                      `del_flag` TINYINT DEFAULT 0   COMMENT '逻辑删除;0存在,1删除' ,
-                     PRIMARY KEY (id)
+                     PRIMARY KEY (post_id)
 )  COMMENT = '岗位信息表';
 
 DROP TABLE IF EXISTS user_post;
