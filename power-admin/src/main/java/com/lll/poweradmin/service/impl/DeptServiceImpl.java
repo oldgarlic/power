@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -27,5 +28,9 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements ID
     @Resource
     private DeptMapper deptMapper;
 
+    @Override
+    public List<Integer> querySubDeptIds(long deptId) {
+        return deptMapper.querySubDeptIds(deptId);
+    }
 }
 

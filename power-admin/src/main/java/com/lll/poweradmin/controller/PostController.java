@@ -9,6 +9,7 @@ import com.lll.poweradmin.common.PageRequest;
 import com.lll.poweradmin.service.IPostService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -74,7 +75,7 @@ public class PostController {
      */
     @ApiOperation("新增数据")
     @PostMapping
-    public Result<Boolean> add(@RequestBody Post post){
+    public Result<Boolean> add(@RequestBody @Validated Post post){
         if(post.getPostId()!=null){
             return Result.ok(postService.updateById(post));
         }

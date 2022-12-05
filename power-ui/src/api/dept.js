@@ -11,7 +11,7 @@ export function addOrUpdateDept(data){
 }
 
 
-export function getList(data) {
+export function getDeptList(data = {sort: 'dept_id'}) {
     return request({
         url: '/power/dept/list',
         method: 'post',

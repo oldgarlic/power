@@ -1,10 +1,13 @@
 package com.lll.poweradmin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lll.poweradmin.common.Result;
 import com.lll.poweradmin.model.domain.User;
 import com.lll.poweradmin.common.PageRequest;
 import com.lll.poweradmin.model.request.UserLoginRequest;
+import com.lll.poweradmin.model.vo.UserPageRequest;
 import com.lll.poweradmin.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>
@@ -70,15 +76,15 @@ public class UserController {
 
     /**
      * 分页查询
-     * @param pageRequest 查询条件
+     * @param userPageRequest 查询条件
      * @return 分页结果
      */
     @ApiOperation("分页查询")
     @PostMapping("page")
-    public Result<Page<User>> pageQuery(@RequestBody PageRequest pageRequest){
-        Page<User> userPage = pageRequest.buildPage(User.class);
-        Page<User> page = userService.page(userPage, pageRequest.build(User.class));
-        return Result.ok(page);
+    public Result<IPage<User>> pageQuery(@RequestBody UserPageRequest userPageRequest){
+        // 查询部门下的所有部门id
+        IPage<User> userPage = userService.userPage(userPageRequest);
+        return Result.ok(userPage);
     }
 
     /**
@@ -114,13 +120,14 @@ public class UserController {
     /**
      * 通过主键删除数据
      *
-     * @param id 主键
+     * @param userIds 主键
      * @return 是否成功
      */
     @ApiOperation("通过主键删除数据")
-    @DeleteMapping("{id}")
-    public Result<Boolean> deleteById(@PathVariable("id") long id){
-        // 这里改成逻辑删除
-        return Result.ok(userService.removeById(id));
+    @DeleteMapping("{userIds}")
+    public Result<Boolean> deleteByIds(@PathVariable("userIds") Long[] userIds){
+        ArrayList<Long> userIdList = new ArrayList<>();
+        Collections.addAll(userIdList,userIds);
+        return Result.ok(userService.removeBatchByIds(userIdList));
     }
 }

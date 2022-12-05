@@ -1,8 +1,10 @@
 package com.lll.poweradmin.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lll.poweradmin.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lll.poweradmin.model.vo.UserPageRequest;
 
 /**
  * <p>
@@ -22,5 +24,6 @@ public interface IUserService extends IService<User> {
      */
     String login(String username,String password);
 
-    //User info(String )
+
+    IPage<User> userPage(UserPageRequest userPageRequest);
 }

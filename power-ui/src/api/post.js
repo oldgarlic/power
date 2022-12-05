@@ -11,7 +11,7 @@ export function addOrUpdatePost(data){
 }
 
 
-export function getList(data) {
+export function getPostList(data = {sort: 'post_id'}) {
     return request({
         url: '/power/post/page',
         method: 'post',

@@ -4,76 +4,36 @@
       <!--部门数据-->
       <el-col :span="4" :xs="24">
         <div class="head-container">
-          <el-input
-            v-model="deptName"
-            placeholder="请输入部门名称"
-            clearable
-            size="small"
-            prefix-icon="el-icon-search"
-            style="margin-bottom: 20px"
-          />
+          <el-input v-model="deptName" placeholder="请输入部门名称" clearable size="small" prefix-icon="el-icon-search"
+            style="margin-bottom: 20px" />
         </div>
         <div class="head-container">
-          <el-tree
-            ref="tree"
-            :data="deptOptions"
-            :props="defaultProps"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            node-key="id"
-            default-expand-all
-            highlight-current
-            @node-click="handleNodeClick"
-          />
+          <el-tree ref="tree" :data="deptOptions" :props="defaultProps" :expand-on-click-node="false"
+            :filter-node-method="filterNode" node-key="id" default-expand-all highlight-current
+            @node-click="handleNodeClick" />
         </div>
       </el-col>
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form ref="queryForm" :model="queryParams" size="small" :inline="true" label-width="68px">
           <el-form-item label="用户名称" prop="username">
-            <el-input
-              v-model="queryParams.username"
-              placeholder="请输入用户名称"
-              clearable
-              style="width: 240px"
-              @keyup.enter.native="handleQuery"
-            />
+            <el-input v-model="queryParams.filter.username" placeholder="请输入用户名称" clearable style="width: 240px"
+              @keyup.enter.native="handleQuery" />
           </el-form-item>
-          <el-form-item label="手机号码" prop="phonenumber">
-            <el-input
-              v-model="queryParams.phonenumber"
-              placeholder="请输入手机号码"
-              clearable
-              style="width: 240px"
-              @keyup.enter.native="handleQuery"
-            />
+          <el-form-item label="手机号码" prop="phone">
+            <el-input v-model="queryParams.filter.phone" placeholder="请输入手机号码" clearable style="width: 240px"
+              @keyup.enter.native="handleQuery" />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select
-              v-model="queryParams.status"
-              placeholder="用户状态"
-              clearable
-              style="width: 240px"
-            >
-              <el-option
-                v-for="dict in dict.type.sys_normal_disable"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
+            <el-select v-model="queryParams.filter.status" placeholder="用户状态" clearable style="width: 240px">
+              <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label"
+                :value="dict.value" />
             </el-select>
           </el-form-item>
-          <el-form-item label="创建时间">
-            <el-date-picker
-              v-model="dateRange"
-              style="width: 240px"
-              value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            />
-          </el-form-item>
+<!--          <el-form-item label="创建时间">-->
+<!--            <el-date-picker v-model="dateRange" style="width: 240px" value-format="yyyy-MM-dd" type="daterange"-->
+<!--              range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" />-->
+<!--          </el-form-item>-->
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -82,77 +42,46 @@
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAdd"
-            >新增</el-button>
+            <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button
-              type="success"
-              plain
-              icon="el-icon-edit"
-              size="mini"
-              :disabled="single"
-              @click="handleUpdate"
-            >修改</el-button>
+            <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate">修改
+            </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button
-              type="danger"
-              plain
-              icon="el-icon-delete"
-              size="mini"
-              @click="handleDelete"
-            >删除</el-button>
+            <el-button type="danger" plain icon="el-icon-delete" size="mini"  :disabled="delete1" @click="handleDelete">删除</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button
-              type="info"
-              plain
-              icon="el-icon-upload2"
-              size="mini"
-              @click="handleImport"
-            >导入</el-button>
+            <el-button type="info" plain icon="el-icon-upload2" size="mini" @click="handleImport">导入</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button
-              type="warning"
-              plain
-              icon="el-icon-download"
-              size="mini"
-              @click="handleExport"
-            >导出</el-button>
+            <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport">导出</el-button>
           </el-col>
-          <!-- 右边的功能: 搜索、刷新、隐藏列 ,自定义的组件，暂时先不做-->
-          <!-- <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar> -->
         </el-row>
         <!--v-loading = 加载状态, data = 数据来源,element-loading-text = 加载的文字,
         border = 表格的边框, fit = 列的自适应,highlight-current-row = 当前行高亮-->
-        <el-table
-          v-loading="listLoading"
-          :data="userList"
-          @selection-change="handleSelectionChange"
-        >
+        <el-table ref="tableData" v-loading="listLoading" :data="userList" @selection-change="handleSelectionChange">
           <!-- 选择框 -->
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column key="userId" label="用户编号" align="center" prop="userId" />
           <el-table-column key="username" label="用户名称" align="center" prop="username" :show-overflow-tooltip="true" />
           <el-table-column key="nickname" label="用户昵称" align="center" prop="nickname" :show-overflow-tooltip="true" />
-          <el-table-column key="deptName" label="部门" align="center" prop="deptName" :show-overflow-tooltip="true" />
-          <el-table-column key="phonenumber" label="手机号码" align="center" prop="phonenumber" width="120" />
+          <el-table-column key="deptName" label="部门" align="center"  :show-overflow-tooltip="true" >
+            <template slot-scope="scope">
+                  <span>{{ deptMap[scope.row.deptId] }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column key="postName" label="岗位" align="center"  :show-overflow-tooltip="true" >
+            <template slot-scope="scope">
+                  <span>{{ postMap[scope.row.postId] }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column key="phone" label="手机号码" align="center" prop="phone" width="120" />
+          <!--status是一个String-->
           <el-table-column key="status" label="状态" align="center">
             <template slot-scope="scope">
               <!-- 切换栏 -->
-              <el-switch
-                v-model="scope.row.status"
-                active-value="0"
-                inactive-value="1"
-                @change="handleStatusChange(scope.row)"
-              />
+              <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)" />
             </template>
           </el-table-column>
           <el-table-column label="创建时间" align="center" prop="createTime" width="160">
@@ -176,19 +105,13 @@
           </el-table-column>
         </el-table>
         <!-- 分页数据 -->
-        <el-pagination
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          :page-size.sync="queryParams.pageSize"
-          :page-sizes="[10, 15, 20, 30]"
-          :current-page="queryParams.pageNum"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+        <el-pagination layout="total, sizes, prev, pager, next, jumper" :total="total"
+          :page-size.sync="queryParams.pageSize" :page-sizes="[5, 10, 20, 30]" :current-page.sync="queryParams.pageNumber"
+          @size-change="handleSizeChange" @current-change="handleCurrentChange" />
       </el-col>
     </el-row>
     <!-- 添加或修改用户配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+    <el-dialog  :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
@@ -204,8 +127,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="手机号码" prop="phonenumber">
-              <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
+            <el-form-item label="手机号码" prop="phone">
+              <el-input v-model="form.phone" placeholder="请输入手机号码" maxlength="11" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -216,13 +139,13 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="username">
+            <el-form-item v-if="form.userId === undefined" label="用户名称" prop="username">
               <el-input v-model="form.username" placeholder="请输入用户名称" maxlength="30" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
-              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password/>
+            <el-form-item v-if="form.userId === undefined" label="用户密码" prop="password">
+              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password />
             </el-form-item>
           </el-col>
         </el-row>
@@ -230,23 +153,16 @@
           <el-col :span="12">
             <el-form-item label="用户性别">
               <el-select v-model="form.sex" placeholder="请选择性别">
-                <el-option
-                  v-for="dict in dict.type.sys_user_sex"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                ></el-option>
+                <el-option v-for="dict in dict.type.sys_user_sex" :key="dict.value" :label="dict.label"
+                  :value="dict.value"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
-                <el-radio
-                  v-for="dict in dict.type.sys_normal_disable"
-                  :key="dict.value"
-                  :label="dict.value"
-                >{{dict.label}}</el-radio>
+                <el-radio v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.value">
+                  {{ dict.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -254,27 +170,17 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
-                <el-option
-                  v-for="item in postOptions"
-                  :key="item.postId"
-                  :label="item.postName"
-                  :value="item.postId"
-                  :disabled="item.status == 1"
-                ></el-option>
+              <el-select v-model="form.postId"  placeholder="请选择岗位">
+                <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName" :value="item.postId"
+                  :disabled="item.status === 1"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="角色">
               <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
-                <el-option
-                  v-for="item in roleOptions"
-                  :key="item.roleId"
-                  :label="item.roleName"
-                  :value="item.roleId"
-                  :disabled="item.status == 1"
-                ></el-option>
+                <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName" :value="item.roleId"
+                  :disabled="item.status === 1"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -296,8 +202,10 @@
 </template>
 
 <script>
-import { addOrUpdateUser,list } from '@/api/user'
-import Treeselect from "@riophae/vue-treeselect";
+import { addOrUpdateUser, list,deleteUserByIds } from '@/api/user'
+import { getDeptList } from '@/api/dept'
+import { getPostList } from '@/api/post'
+import treeselect from "@riophae/vue-treeselect";
 import '@riophae/vue-treeselect/dist/vue-treeselect.css';
 export default {
   filters: {
@@ -310,7 +218,7 @@ export default {
       return statusMap[status]
     }
   },
-  components: { Treeselect },
+  components: { treeselect },
   data() {
     return {
       // 这里是数据
@@ -320,7 +228,7 @@ export default {
           username: '张飞',
           nickname: '战神',
           deptName: '马来西亚',
-          phonenumber: '110',
+          phone: '110',
           status: 1,
           createTime: '2011-01-21 10:20:01'
         },
@@ -329,7 +237,7 @@ export default {
           username: '张飞',
           nickname: '战神',
           deptName: '马来西亚',
-          phonenumber: '110',
+          phone: '110',
           status: 1,
           createTime: '2011-01-21 10:20:01'
         },
@@ -338,7 +246,7 @@ export default {
           username: '张飞',
           nickname: '战神',
           deptName: '马来西亚',
-          phonenumber: '110',
+          phone: '110',
           status: 1,
           createTime: '2011-01-21 10:20:01'
         },
@@ -347,7 +255,7 @@ export default {
           username: '张飞',
           nickname: '战神',
           deptName: '马来西亚',
-          phonenumber: '110',
+          phone: '110',
           status: 1,
           createTime: '2011-01-21 10:20:01'
         },
@@ -356,7 +264,7 @@ export default {
           username: '张飞',
           nickname: '战神',
           deptName: '马来西亚',
-          phonenumber: '110',
+          phone: '110',
           status: 1,
           createTime: '2011-01-21 10:20:01'
         },
@@ -365,7 +273,7 @@ export default {
           username: '张飞',
           nickname: '战神',
           deptName: '马来西亚',
-          phonenumber: '110',
+          phone: '110',
           status: 1,
           createTime: '2011-01-21 10:20:01'
         }
@@ -374,16 +282,24 @@ export default {
       dict: {
         type: {
           sys_normal_disable: [{
-            value: 0,
+            value: "0",
             label: '正常'
           },
           {
-            value: 1,
+            value: "1",
             label: '停用'
-          }]
+          }],
+          sys_user_sex:[{
+            label: '男性',
+            value: 1
+          },{
+            label: '女性',
+            value: 0
+          }],
         }
       },
       title: '',
+      delete1: true,
       form: {},
       // 岗位选项
       postOptions: [],
@@ -409,7 +325,7 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        phonenumber: [
+        phone: [
           {
             pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
             message: "请输入正确的手机号码",
@@ -430,12 +346,16 @@ export default {
       total: 6,
       // 查询参数
       queryParams: {
-        pageNum: 1,
+        pageNumber: 1,
         pageSize: 10,
-        username: undefined,
-        phonenumber: undefined,
-        status: undefined,
-        deptId: undefined
+        sort: 'user_id',
+        dept: undefined,
+        filter: {
+          username: undefined,
+          phone: undefined,
+          status: undefined,
+          deptId: undefined
+        }
       },
       dateRange: '',
       deptName: '',
@@ -463,11 +383,15 @@ export default {
       listLoading: false,
       open: false,
       ids: [],
-      single: false
+      single: true,
+      postMap:{},
+      deptMap:{}
     }
   },
   created() {
-    // this.fetchData()
+    this.fetchUser()
+    this.fetchDept()
+    this.fetchPost()
   },
   watch: {
     // 根据名称筛选部门树
@@ -476,49 +400,76 @@ export default {
     }
   },
   methods: {
+    fetchPost(){
+      getPostList().then(response=>{
+        this.postOptions = response.data.records
+        // TODO 这里再给封装出来一个信息
+        this.postOptions.map(post=>this.postMap[post.postId] = post.postName)
+        console.log(this.postMap)
+
+      })
+    },
+    fetchDept() {
+      getDeptList({ sort: 'dept_id' }).then(response => {
+        this.deptOptions = this.handleTree(response.data, "deptId")
+        // TODO 这里再给封装一个信息
+        // console.log(response.data)
+        response.data.map(dept=>this.deptMap[dept.deptId] = dept.deptName)
+        console.log(this.deptMap)
+      })
+    },
     showSearch() {
 
     },
     handleQuery() {
-
+      this.fetchUser();
     },
     resetQuery() {
-
+      this.queryParams.filter = {
+          username: undefined,
+          phone: undefined,
+          status: undefined
+      }
+      this.fetchUser()
     },
-    getList() {
-      // TODO
-    },
-    fetchData() {
-      getList().then((response) => {
-        this.list = response.data.items
+    fetchUser() {
+      list(this.queryParams).then((response) => {
+        this.userList = response.data.records
+        this.total = response.data.total
+        this.queryParams.pageNumber = response.data.current
+        this.queryParams.pageSize = response.data.size
+        console.log(this.userList)
       })
     },
     handleSelectionChange(selection) {
       console.log('选择切换')
       this.ids = selection.map(item => item.userId)
       this.single = selection.length !== 1
-      if (!this.single) {
-        this.form = selection[0]
-        console.log('赋值')
-        console.log(this.form)
-      }
+      this.delete1 = selection.length === 0
     },
-    handleStatusChange() {
-      console.log('状态切换')
+    handleStatusChange(row) {
+      console.log('状态切换: ${row.status}')
+      addOrUpdateUser(row).then(()=>{
+        this.fetchUser();
+      })
     },
     handleDelete(row) {
       console.log('点击 删除')
       const userIds = row.userId || this.ids
-      console.log(userIds)
+      deleteUserByIds(userIds).then(()=>{
+        this.fetchUser()
+      })
     },
     handleCommand() {
 
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
+      this.fetchUser();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
+      this.fetchUser();
     },
     // 节点过滤
     filterNode(value, data) {
@@ -526,21 +477,26 @@ export default {
       return data.label.indexOf(value) !== -1
     },
     handleNodeClick(val) {
-      console.log(`部门选择: ${val}`)
+      console.log(`部门选择: ${val.deptName}`)
+      this.queryParams.deptId = val.deptId
+      this.fetchUser()
     },
     handleAdd() {
       console.log('添加用户')
       this.open = true
     },
     handleUpdate(row) {
-      // TODO: 逻辑还是有点小问题
-      console.log('修改用户')
-      const userId = row.userId || this.ids
-      this.open = true
-      if (this.single) {
-        console.log(row)
+      console.log("执行修改")
+      console.log(row)
+      let userId = null
+      if (row.userId) {
         this.form = row
+        userId = row.userId
+      } else {
+        userId = this.ids[0]
+        this.form = this.$refs.tableData.selection[0]
       }
+      this.open = true
     },
     handleImport() {
       console.log('导入用户')
@@ -550,12 +506,70 @@ export default {
     },
     submitForm() {
       console.log('提交表单')
-      addOrUpdateUser(this.form).then(() =>{
-        // this.fetchData()
+      addOrUpdateUser(this.form).then(() => {
+        this.fetchUser()
       })
+      this.open = false;
+      this.form = {}
     },
     cancel() {
 
+    },
+    /**
+ * 构造树型结构数据
+ * @param {*} data 数据源
+ * @param {*} id id字段 默认 'id'
+ * @param {*} parentId 父节点字段 默认 'parentId'
+ * @param {*} children 孩子节点字段 默认 'children'
+ */
+    handleTree(data, id, parentId = 'parentId', children = 'children') {
+      let config = {
+        id: id || 'id',
+        parentId: parentId || 'parentId',
+        childrenList: children || 'children'
+      };
+
+      var childrenListMap = {};
+      var nodeIds = {};
+      var tree = [];
+
+      for (let d of data) {
+        let parentId = d[config.parentId];
+        if (childrenListMap[parentId] == null) {
+          childrenListMap[parentId] = [];
+        }
+        nodeIds[d[config.id]] = d;
+        childrenListMap[parentId].push(d);
+      }
+
+      for (let d of data) {
+        let parentId = d[config.parentId];
+        if (nodeIds[parentId] == null) {
+          // 自己补充
+          d.id = d.deptId
+          d.label = d.deptName
+          tree.push(d);
+        }
+      }
+
+      for (let t of tree) {
+        adaptToChildrenList(t);
+      }
+
+      function adaptToChildrenList(o) {
+        // 自己补充
+        o.id = o.deptId
+        o.label = o.deptName
+        if (childrenListMap[o[config.id]] !== null) {
+          o[config.childrenList] = childrenListMap[o[config.id]];
+        }
+        if (o[config.childrenList]) {
+          for (let c of o[config.childrenList]) {
+            adaptToChildrenList(c);
+          }
+        }
+      }
+      return tree;
     }
   }
 }

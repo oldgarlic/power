@@ -43,8 +43,8 @@
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)">新增</el-button>
-          <el-button v-if="scope.row.parentId != 0" size="mini" type="text" icon="el-icon-delete"
-            @click="handleDelete(scope.row)">删除</el-button>
+          <el-button v-if="scope.row.parentId !== 0" size="mini" type="text" icon="el-icon-delete"
+                     @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -93,9 +93,9 @@
           <el-col :span="12">
             <el-form-item label="部门状态">
               <el-radio-group v-model="form.status">
-                <el-radio v-for="dict in dictType.sys_normal_disable" :key="dict.value" :label="dict.value">{{
-                    dict.label
-                }}</el-radio>
+                <el-radio v-for="dict in dictType.sys_normal_disable" :key="dict.value" :label="dict.value">
+                  {{dict.label}}
+                </el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -112,7 +112,7 @@
 <script>
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { addOrUpdateDept, getList, deleteDept } from '@/api/dept'
+import { addOrUpdateDept, getDeptList, deleteDept } from '@/api/dept'
 export default {
   name: 'Dept',
   components: { Treeselect },
@@ -166,7 +166,7 @@ export default {
       }],
       // 部门树选项
       deptOptions: [{
-        id: 1, 
+        id: 1,
         children: [{
           id: 2,
           label: 'children1'
@@ -244,7 +244,7 @@ export default {
   methods: {
     /** 查询部门列表 */
     getList() {
-      getList(this.queryParams).then(response => {
+      getDeptList(this.queryParams).then(response => {
         // this.deptList = response.data;
         // 这里要构建出树形数据
         this.deptList = this.handleTree(response.data, "deptId");
@@ -316,16 +316,16 @@ export default {
      * @param {*} parentId 父节点字段 默认 'parentId'
      * @param {*} children 孩子节点字段 默认 'children'
      */
-    handleTree(data, id, parentId, children) {
+    handleTree(data, id, parentId = "parentId", children = "children") {
       let config = {
         id: id || 'id',
         parentId: parentId || 'parentId',
         childrenList: children || 'children'
       };
 
-      var childrenListMap = {};
-      var nodeIds = {};
-      var tree = [];
+      const childrenListMap = {}
+      const nodeIds = {}
+      const tree = []
 
       for (let d of data) {
         let parentId = d[config.parentId];

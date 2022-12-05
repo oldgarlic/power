@@ -23,10 +23,11 @@ export function logout() {
   })
 }
 
-export function list() {
+export function list(data) {
   return request({
-    url: '/power/user/logout',
-    method: 'post'
+    url: '/power/user/page',
+    method: 'post',
+    data
   })
 }
 
@@ -38,3 +39,13 @@ export function addOrUpdateUser(data) {
   })
 }
 
+export function deleteUserByIds(userIds) {
+  return request({
+    url: '/power/user/'+userIds,
+    method: 'delete'
+  })
+}
+
+export function getUser(){
+  
+}

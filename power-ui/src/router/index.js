@@ -54,7 +54,7 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-
+  // 菜单栏
   {
     path: '/system',
     component: Layout,
@@ -82,28 +82,17 @@ export const constantRoutes = [
       }
     ]
   },
-
+  // 配置左边栏信息
   {
-    path: '/form',
+    path: '/user',
     component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
+    // redirect: '/',
+    children: [{
+      path: 'profile',
+      name: 'profile',
+      component: () => import('@/views/user/profile/index'),
+      // meta: { title: '个人中心', icon: 'profile' }
+    }]
   },
 
   // 404 page must be placed at the end !!!

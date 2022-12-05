@@ -20,7 +20,7 @@
                 <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
             </el-form-item>
         </el-form>
-        
+
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
                 <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
@@ -74,7 +74,6 @@
             layout="total, sizes, prev, pager, next, jumper"
         />
 
-    
         <!-- 添加或修改岗位对话框 -->
         <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
             <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -108,7 +107,7 @@
 
 <script>
 
-import { addOrUpdatePost,getList,deletePost} from '@/api/post'
+import { addOrUpdatePost,getPostList,deletePost} from '@/api/post'
 
 export default {
     name: "Post",
@@ -219,10 +218,10 @@ export default {
     methods: {
         /** 查询岗位列表 */
         getList() {
-            getList({}).then((response) => {
+            getPostList().then((response) => {
                 this.postList = response.data.records
                 this.total  = response.data.total
-                this.queryParams.pageNumberber = response.data.current
+                this.queryParams.pageNumber = response.data.current
                 this.queryParams.pageSize = response.data.size
             })
         },
@@ -230,7 +229,7 @@ export default {
         cancel() {
         },
         // 表单重置
-        reset() { 
+        reset() {
             this.form = {
                 postId: undefined,
                 postCode: undefined,
@@ -273,8 +272,8 @@ export default {
         },
         /** 修改按钮操作 */
         handleUpdate(row) {
-            var postId = null
-            if(row.postId){
+          let postId = null;
+          if(row.postId){
                 this.form = row
                 postId = row.postId
             }else{
@@ -286,7 +285,7 @@ export default {
             this.open = true
         },
         /** 提交按钮 */
-        submitForm() { 
+        submitForm() {
             console.log('提交表单')
             console.log(this.form)
             addOrUpdatePost(this.form)
@@ -312,7 +311,7 @@ export default {
             this.getList()
         },
         /** 导出按钮操作 */
-        handleExport() { 
+        handleExport() {
             console.log('文件导出')
         },
         handleSizeChange() {

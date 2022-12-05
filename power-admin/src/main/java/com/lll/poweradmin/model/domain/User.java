@@ -7,11 +7,14 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -55,11 +58,15 @@ public class User implements Serializable {
     @ApiModelProperty(value = "手机号码")
     private String phone;
 
+    // 它用的是string
     @ApiModelProperty(value = "状态;0正常,1停用")
-    private Integer status;
+    private String status;
 
     @ApiModelProperty(value = "部门ID")
     private Long deptId;
+
+    @ApiModelProperty(value = "岗位id")
+    private Long postId;
 
     @ApiModelProperty(value = "登录IP")
     private LocalDateTime loginIp;
@@ -84,6 +91,5 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "注解")
     private String remark;
-
 
 }

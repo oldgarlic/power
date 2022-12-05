@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lll.poweradmin.model.domain.Dept;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 部门信息表 服务类
@@ -14,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDeptService extends IService<Dept> {
 
+    List<Integer> querySubDeptIds(long deptId);
 }
