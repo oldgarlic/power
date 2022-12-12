@@ -31,6 +31,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private IDeptService deptService;
 
 
+
+
     /**
      * 用户登录
      *
@@ -58,5 +60,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             queryWrapper.in("dept_id",deptService.querySubDeptIds(userPageRequest.getDeptId()));
         }
         return userMapper.selectPage(userPage,queryWrapper);
+    }
+
+    @Override
+    public User selectUserByUsername(String username) {
+        LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.eq(User::getUsername,username);
+        return userMapper.selectOne(userLambdaQueryWrapper);
     }
 }

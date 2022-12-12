@@ -26,4 +26,6 @@ public interface IUserService extends IService<User> {
 
 
     IPage<User> userPage(UserPageRequest userPageRequest);
+
+    User selectUserByUsername(String username);
 }

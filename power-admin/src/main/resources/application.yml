@@ -19,3 +19,8 @@ server:
   port: 9000
   servlet:
     context-path: /power   # 设置统一前缀路径
+
+token:
+  secret: iT2qN6iK4oW8bB0k   #令牌密钥
+  expire: 30   # token 默认30分钟
+  header: Authorization  # token标识

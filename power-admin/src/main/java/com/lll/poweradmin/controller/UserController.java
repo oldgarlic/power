@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lll.poweradmin.common.Result;
+import com.lll.poweradmin.core.service.LoginService;
 import com.lll.poweradmin.model.domain.User;
 import com.lll.poweradmin.common.PageRequest;
 import com.lll.poweradmin.model.request.UserLoginRequest;
@@ -35,16 +36,13 @@ public class UserController {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private LoginService loginService;
+
     @ApiOperation("用户登录")
     @PostMapping("login")
     public Result<String> login(@RequestBody UserLoginRequest userLoginRequest){
-        // 拿到请求写回token
-        String token = "asd";
-        // 0.参数校验
-        // 1. 校对用户名和密码
-
-        // 2. 返回token
-        // 记录登录事件
+        String token = loginService.login(userLoginRequest.getUserName(), userLoginRequest.getPassword());
         return Result.ok(token);
     }
 

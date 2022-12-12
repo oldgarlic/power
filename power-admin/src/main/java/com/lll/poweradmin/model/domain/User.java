@@ -75,7 +75,7 @@ public class User implements Serializable {
     private LocalDateTime lastLogin;
 
     @ApiModelProperty(value = "逻辑删除;0存在,1删除")
-    private Integer delFlag;
+    private String delFlag;
 
     @ApiModelProperty(value = "创建人")
     private Long createBy;
