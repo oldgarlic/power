@@ -389,9 +389,9 @@ export default {
     }
   },
   created() {
-    this.fetchUser()
     this.fetchDept()
     this.fetchPost()
+    this.fetchUser()
   },
   watch: {
     // 根据名称筛选部门树
@@ -513,7 +513,7 @@ export default {
       this.form = {}
     },
     cancel() {
-
+      this.open = false;
     },
     /**
  * 构造树型结构数据

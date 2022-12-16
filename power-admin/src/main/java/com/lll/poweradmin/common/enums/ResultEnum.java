@@ -1,4 +1,4 @@
-package com.lll.poweradmin.model.enums;
+package com.lll.poweradmin.common.enums;
 
 /**
  * 错误信息枚举

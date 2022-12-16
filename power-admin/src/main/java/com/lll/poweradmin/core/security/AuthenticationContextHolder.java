@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
  * @author oldgarlic
  * @since 2022/12/12
  */
-public class UserInfoContextHolder {
+public class AuthenticationContextHolder {
     private static final ThreadLocal<Authentication> contextHolder = new ThreadLocal<>();
 
     public static void setContext(Authentication authentication){

@@ -47,7 +47,7 @@ public class User implements Serializable {
     private String password;
 
     @ApiModelProperty(value = "性别")
-    private Integer sex;
+    private String sex;
 
     @ApiModelProperty(value = "头像地址")
     private String avatar;
@@ -58,7 +58,6 @@ public class User implements Serializable {
     @ApiModelProperty(value = "手机号码")
     private String phone;
 
-    // 它用的是string
     @ApiModelProperty(value = "状态;0正常,1停用")
     private String status;
 

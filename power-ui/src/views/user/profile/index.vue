@@ -13,19 +13,19 @@
             <ul class="list-group list-group-striped">
               <li class="list-group-item">
                 <svg-icon icon-class="user" />用户名称
-                <div class="pull-right"> 张三</div>
+                <div class="pull-right"> {{user.username}}</div>
               </li>
               <li class="list-group-item">
                 <i class="el-icon-phone" />手机号码
-                <div class="pull-right">16254321343</div>
+                <div class="pull-right">{{user.phone}}</div>
               </li>
               <li class="list-group-item">
                 <i class="el-icon-chicken" />用户邮箱
-                <div class="pull-right">qs@sda.com</div>
+                <div class="pull-right">{{user.email}}</div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="tree" />所属部门
-                <div class="pull-right">财务部 / 财务</div>
+                <div class="pull-right">{{user.deptId}} / {{user.postId}}</div>
               </li>
               <li class="list-group-item">
                 <i class="el-icon-sugar" />所属角色
@@ -33,7 +33,7 @@
               </li>
               <li class="list-group-item">
                 <i class="el-icon-coffee-cup" />创建日期
-                <div class="pull-right">2022-11-21 12:00:21</div>
+                <div class="pull-right">{{user.createTime}}</div>
               </li>
             </ul>
           </div>
@@ -62,7 +62,7 @@
 import resetPwd from "./resetPwd";
 import userInfo from "./userInfo";
 import userAvatar from "./userAvatar";
-import { addOrUpdateUser, list,deleteUserByIds } from '@/api/user'
+import { addOrUpdateUser, list,deleteUserByIds ,getInfo} from '@/api/user'
 export default {
   name: "Profile",
   components: { userAvatar,userInfo, resetPwd },
@@ -81,24 +81,24 @@ export default {
   },
   methods: {
     getUser() {
-      // getUserProfile().then(response => {
-      //   this.user = response.data;
-      //   this.roleGroup = response.roleGroup;
-      //   this.postGroup = response.postGroup;
-      // });
-    },
-    submitInfo() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          // updateUserProfile(this.user).then(response => {
-          //   this.$modal.msgSuccess("修改成功");
-          // });
-        }
+      getInfo().then(response => {
+        this.user = response.data;
+        // this.roleGroup = response.roleGroup;
+        // this.postGroup = response.postGroup;
       });
     },
-    closeInfo() {
-      this.$tab.closePage();
-    } 
+    // submitInfo() {
+    //   this.$refs["form"].validate(valid => {
+    //     if (valid) {
+    //       updateUserProfile(this.user).then(response => {
+    //         this.$modal.msgSuccess("修改成功");
+    //       });
+    //     }
+    //   });
+    // },
+    // closeInfo() {
+    //   this.$tab.closePage();
+    // } 
   }
 };
 </script>

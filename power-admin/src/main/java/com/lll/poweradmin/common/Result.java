@@ -1,6 +1,6 @@
 package com.lll.poweradmin.common;
 
-import com.lll.poweradmin.model.enums.ResultEnum;
+import com.lll.poweradmin.common.enums.ResultEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -25,6 +25,10 @@ public class Result<T> {
         this.message = message;
     }
 
+    public Result(String message) {
+        this.message = message;
+    }
+
     public Result(ResultEnum resultEnum) {
         this(resultEnum.getCode(),resultEnum.getMessage());
     }
@@ -43,6 +47,10 @@ public class Result<T> {
 
     public static Result<?> error(){
         return error(ResultEnum.ERROR);
+    }
+
+    public static Result<?> error(String errorMessage){
+        return new Result<>(errorMessage);
     }
 
     public static Result<?> error(ResultEnum resultEnum){

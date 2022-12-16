@@ -1,9 +1,10 @@
 package com.lll.poweradmin.core.service;
 
-import com.lll.poweradmin.common.exception.ServiceException;
 import com.lll.poweradmin.common.exception.UserException;
+import com.lll.poweradmin.core.security.AuthenticationContextHolder;
 import com.lll.poweradmin.model.domain.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 /**
  * 密码验证服务
@@ -11,12 +12,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @author oldgarlic
  * @since 2022/12/11
  */
+@Service
 public class PasswordService {
 
     public void validate(User user){
         // TODO: 1、密码重试; 2、密码如果重试次数过多，会锁住
         // 如果密码认证失败，就报错，认证成功就成功
-        String password = "";
+        Authentication usernamePasswordAuthenticationToken = AuthenticationContextHolder.getContext();
+        //String usernmae = usernamePasswordAuthenticationToken.getName();
+        String password = usernamePasswordAuthenticationToken.getCredentials().toString();
         if(!matchPassword(user.getPassword(),password)){
             throw new UserException("密码不正确");
         }
