@@ -25,7 +25,7 @@
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="tree" />所属部门
-                <div class="pull-right">{{user.deptId}} / {{user.postId}}</div>
+                <div class="pull-right">{{user.deptName}} / {{user.postName}}</div>
               </li>
               <li class="list-group-item">
                 <i class="el-icon-sugar" />所属角色
@@ -87,18 +87,7 @@ export default {
         // this.postGroup = response.postGroup;
       });
     },
-    // submitInfo() {
-    //   this.$refs["form"].validate(valid => {
-    //     if (valid) {
-    //       updateUserProfile(this.user).then(response => {
-    //         this.$modal.msgSuccess("修改成功");
-    //       });
-    //     }
-    //   });
-    // },
-    // closeInfo() {
-    //   this.$tab.closePage();
-    // } 
+
   }
 };
 </script>

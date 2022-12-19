@@ -17,7 +17,7 @@
 </template>
 
 <script>
-// import { updateUserPwd } from "@/api/system/user";
+import { updateUserPwd } from '@/api/user'
 
 export default {
   data() {
@@ -41,7 +41,7 @@ export default {
         ],
         newPassword: [
           { required: true, message: "新密码不能为空", trigger: "blur" },
-          { min: 6, max: 20, message: "长度在 6 到 20 个字符", trigger: "blur" }
+          { min: 5, max: 20, message: "长度在 6 到 20 个字符", trigger: "blur" }
         ],
         confirmPassword: [
           { required: true, message: "确认密码不能为空", trigger: "blur" },
@@ -54,14 +54,14 @@ export default {
     submit() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          // updateUserPwd(this.user.oldPassword, this.user.newPassword).then(response => {
-          //   this.$modal.msgSuccess("修改成功");
-          // });
+          updateUserPwd({oldPassword: this.user.oldPassword, newPassword: this.user.newPassword}).then(response => {
+            this.$message.success("密码修改成功")
+          });
         }
       });
     },
     close() {
-      this.$tab.closePage();
+      this.$router.push(`/dashboard`)
     }
   }
 };

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lll.poweradmin.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lll.poweradmin.model.vo.UserPageRequest;
+import com.lll.poweradmin.model.vo.UserVO;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -28,4 +30,10 @@ public interface IUserService extends IService<User> {
     IPage<User> userPage(UserPageRequest userPageRequest);
 
     User selectUserByUsername(String username);
+
+    UserVO selectUserById(long userId);
+
+    void updateUserPassword(long userId,String password);
+
+    void uploadAvatar(MultipartFile image);
 }

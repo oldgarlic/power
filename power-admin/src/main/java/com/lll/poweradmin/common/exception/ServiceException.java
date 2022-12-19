@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
  * @author oldgarlic
  * @since 2022/12/11
  */
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-public class ServiceException extends RuntimeException{
+public class ServiceException extends BaseException{
 
     public ServiceException(String message) {
         super(message);

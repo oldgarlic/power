@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
  * @author oldgarlic
  * @since 2022/12/12
  */
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
 public class UserException extends BaseException{
     public UserException(String message) {
         super(message);

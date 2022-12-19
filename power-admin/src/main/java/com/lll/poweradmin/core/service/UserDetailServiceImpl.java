@@ -2,6 +2,7 @@ package com.lll.poweradmin.core.service;
 
 import com.lll.poweradmin.common.enums.UserStatus;
 import com.lll.poweradmin.common.exception.ServiceException;
+import com.lll.poweradmin.common.exception.UserException;
 import com.lll.poweradmin.model.domain.User;
 import com.lll.poweradmin.model.dto.LoginUser;
 import com.lll.poweradmin.service.IUserService;
@@ -32,26 +33,25 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private PasswordService passwordService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)  {
         User user = userService.selectUserByUsername(username);
         if(Objects.isNull(user)){
             // 如果对象为空
-            throw new ServiceException("登录用户不存在，用户名：" + username);
+            throw new UserException("登录用户不存在，用户名：" + username);
         }
 
         if(user.getStatus().equals(UserStatus.DISABLE.getCode())){
             // 如果停用
-            throw new ServiceException("当前用户已停用，用户名："+username);
+            throw new UserException("当前用户已停用，用户名："+username);
         }
 
         if(user.getDelFlag().equals(UserStatus.DELETED.getCode())){
             // 如果已经删除
-            throw new ServiceException("当前用户已删除，用户名："+username);
+            throw new UserException("当前用户已删除，用户名："+username);
         }
-
+        // 匹配密码
         passwordService.validate(user);
 
-        //
         return createLoginUser(user);
     }
 

@@ -70,6 +70,13 @@ public class TokenService {
         redisCache.setStringCache(tokenRedisKey,loginUser,expireTime, TimeUnit.MINUTES);
     }
 
+    public void setLoginUser(LoginUser loginUser){
+        if (loginUser!=null && StringUtils.isNotBlank(loginUser.getLoginUserId())){
+            refreshToken(loginUser);
+        }
+    }
+
+
     public  String createToken(Map<String,String> claims){
         // 指定token过期时间为10秒
         JWTCreator.Builder builder = JWT.create();

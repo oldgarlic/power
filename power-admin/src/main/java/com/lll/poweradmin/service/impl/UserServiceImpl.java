@@ -2,15 +2,23 @@ package com.lll.poweradmin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lll.poweradmin.model.domain.Dept;
+import com.lll.poweradmin.model.domain.Post;
 import com.lll.poweradmin.model.domain.User;
 import com.lll.poweradmin.mapper.UserMapper;
 import com.lll.poweradmin.model.vo.UserPageRequest;
+import com.lll.poweradmin.model.vo.UserVO;
 import com.lll.poweradmin.service.IDeptService;
+import com.lll.poweradmin.service.IPostService;
 import com.lll.poweradmin.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -30,8 +38,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private IDeptService deptService;
 
+    @Resource
+    private IPostService postService;
 
 
+    @Override
+    public void updateUserPassword(long userId, String password) {
+        LambdaUpdateWrapper<User> userUpdateWrapper = new LambdaUpdateWrapper<>();
+        userUpdateWrapper.set(User::getPassword,password);
+        userUpdateWrapper.eq(User::getUserId,userId);
+        this.update(userUpdateWrapper);
+    }
+
+    @Override
+    public void uploadAvatar(MultipartFile image) {
+        // TODO:
+        // 1、传到OSS服务器上
+        // 2、更新到数据中
+    }
 
     /**
      * 用户登录
@@ -67,5 +91,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userLambdaQueryWrapper.eq(User::getUsername,username);
         return userMapper.selectOne(userLambdaQueryWrapper);
+    }
+
+    @Override
+    public UserVO selectUserById(long userId) {
+        User user = getById(userId);
+        UserVO userVO = new ModelMapper().map(user, UserVO.class);
+        Post post = postService.getById(user.getPostId());
+        Dept dept = deptService.getById(user.getDeptId());
+        userVO.setPostName(post.getPostName());
+        userVO.setDeptName(dept.getDeptName());
+        return userVO;
     }
 }

@@ -46,6 +46,14 @@ export function deleteUserByIds(userIds) {
   })
 }
 
+export function updateUserPwd(data){
+  return request({
+    url: '/power/user/updatePwd',
+    method: 'put',
+    params: data
+  })
+}
+
 export function getUser(){
   
 }

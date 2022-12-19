@@ -291,10 +291,10 @@ export default {
           }],
           sys_user_sex:[{
             label: '男性',
-            value: 1
+            value: "1"
           },{
             label: '女性',
-            value: 0
+            value: "0"
           }],
         }
       },

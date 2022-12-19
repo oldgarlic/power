@@ -4,17 +4,16 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -29,6 +28,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName("user")
 @ApiModel(value="User对象", description="用户信息表")
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -80,12 +81,14 @@ public class User implements Serializable {
     private Long createBy;
 
     @ApiModelProperty(value = "创建时间")
+    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")  // 前端传后端处理，请求中使用，请求头不行,注意构造器
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "更新人")
     private String updateBy;
 
     @ApiModelProperty(value = "更新时间")
+    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")   // 前端传后端处理，请求中使用，请求头不行
     private LocalDateTime updateTime;
 
     @ApiModelProperty(value = "注解")

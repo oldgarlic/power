@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         // logout 过滤器
         http.logout().logoutUrl("/user/logout").logoutSuccessHandler(logoutSuccessHandler);
+
     }
 
 

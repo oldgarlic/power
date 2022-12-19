@@ -11,8 +11,8 @@
     </el-form-item>
     <el-form-item label="性别">
       <el-radio-group v-model="user.sex">
-        <el-radio label="0">男</el-radio>
-        <el-radio label="1">女</el-radio>
+        <el-radio label="1">男</el-radio>
+        <el-radio label="0">女</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item>
@@ -23,8 +23,7 @@
 </template>
 
 <script>
-// import { updateUserProfile } from "@/api/system/user";
-
+import { addOrUpdateUser, list,deleteUserByIds } from '@/api/user'
 export default {
   props: {
     user: {
@@ -46,30 +45,29 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        phonenumber: [
-          { required: true, message: "手机号码不能为空", trigger: "blur" },
-          {
-            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-            message: "请输入正确的手机号码",
-            trigger: "blur"
-          }
-        ]
-      },
-      user:{}
+        // phone: [
+        //   { required: true, message: "手机号码不能为空", trigger: "blur" },
+        //   {
+        //     pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+        //     message: "请输入正确的手机号码",
+        //     trigger: "blur"
+        //   }
+        // ]
+      }
     };
   },
   methods: {
     submit() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          // updateUserProfile(this.user).then(response => {
-          //   this.$modal.msgSuccess("修改成功");
-          // });
+          addOrUpdateUser(this.user).then(response => {
+            this.$message.success("用户信息修改成功")
+          });
         }
       });
     },
     close() {
-      this.$tab.closePage();
+      this.$router.push(`/dashboard`)
     }
   }
 };

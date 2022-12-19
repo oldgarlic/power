@@ -82,7 +82,8 @@ export default {
   methods: {
     // 编辑头像
     editCropper() {
-      this.open = true;
+      // this.open = true;
+      this.$message.error("暂时不执行更改头像")
     },
     // 打开弹出层结束时的回调
     modalOpened() {
